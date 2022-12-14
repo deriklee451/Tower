@@ -1,21 +1,29 @@
+// @ts-ignore
 import idGetter from "mongoose/lib/helpers/schema/idGetter.js"
 import { dbContext } from "../db/DbContext.js"
-import { BadRequest } from "../utils/Errors.js"
+import { BadRequest, Forbidden } from "../utils/Errors.js"
 
 
 class EventsService {
 
 
-    async deleteEvent(id) {
-        const event = await dbContext.Events.findById(id)
-        if (!event) throw new BadRequest('No event')
-        await event.remove()
-        return 'deleted'
+    async deleteEvent(id, userId) {
+        const event = await this.getEventById(id)
+
+        // @ts-ignore
+        if (event.creatorId != userId) throw new Forbidden('not your event')
+        // @ts-ignore
+        event.isCanceled = true
+        // @ts-ignore
+        await event.save()
+
+        return `Cancelled`
     }
 
     async editEvent(id, eventData) {
         const event = await dbContext.Events.findById(id)
         if (!event) throw new BadRequest('no event at id')
+        if (event.isCanceled) throw new BadRequest('Event cancelled. ')
 
         event.name = eventData.name ? eventData.name : event.name
         event.description = eventData.description ? eventData.description : event.description
