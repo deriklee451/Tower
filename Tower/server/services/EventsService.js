@@ -20,10 +20,11 @@ class EventsService {
         return `Cancelled`
     }
 
-    async editEvent(id, eventData) {
+    async editEvent(id, eventData, userId) {
         const event = await dbContext.Events.findById(id)
         if (!event) throw new BadRequest('no event at id')
         if (event.isCanceled) throw new BadRequest('Event cancelled. ')
+        if (event.creatorId != userId) throw new Forbidden('not your event')
 
         event.name = eventData.name ? eventData.name : event.name
         event.description = eventData.description ? eventData.description : event.description

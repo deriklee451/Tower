@@ -11,6 +11,8 @@ class TicketsService {
         const ticket = await dbContext.Tickets.findById(id).populate('event profile')
         if (!ticket) throw new BadRequest('no Ticket to delete')
 
+        if (ticket.accountId != userId) throw new Forbidden('Not your comment')
+
 
 
         const event = await eventsService.getEventById(ticket.eventId)
@@ -33,6 +35,8 @@ class TicketsService {
         const event = await eventsService.getEventById(body.eventId)
         if (event) {
             if (event.isCanceled) throw new Forbidden('Event Cancelled, Tickets not available')
+            // @ts-ignore
+            if (event.capacity <= 0) throw new BadRequest('No tickets available. ')
 
             const ticket = await dbContext.Tickets.create(body)
             await ticket.populate('event profile')
