@@ -1,3 +1,4 @@
+
 import { AppState } from "../AppState.js"
 import { logger } from "../utils/Logger.js"
 import { api } from "./AxiosService.js"
@@ -24,6 +25,12 @@ class EventsService {
         logger.log('get event by id', res.data)
         AppState.activeEvent = res.data
 
+    }
+
+    async cancelEvent(eventId) {
+        const res = await api.delete('api/events/' + eventId)
+        logger.log(res.data)
+        AppState.activeEvent.isCanceled = true
     }
 
 }
