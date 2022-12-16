@@ -55,7 +55,9 @@
                         </h5>
                         <p>Where: {{ event.location }}</p>
                         <p>When: {{ new Date(event.startDate).toLocaleDateString() }}</p>
-                        <p class="fw-bold"> Tickets Available : {{ event.capacity }}</p>
+                        <p class="fw-bold" :class="{ 'text-danger': event.capacity < 1 }"> Tickets Available : {{
+                                event.capacity
+                        }}</p>
                         <div class="row">
                             <div class="div">
 
@@ -85,7 +87,7 @@
                 <div v-for="t in tickets" class="col-1">
 
                     <a :href="t.profile.picture" target=_blank>
-                        <img :src="t.profile.picture" alt="" class="img-fluid rounded">
+                        <img :src="t.profile.picture" :title="t.profile.name" alt="" class="img-fluid rounded">
                     </a>
                 </div>
 

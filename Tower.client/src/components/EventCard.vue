@@ -15,7 +15,7 @@
 
 
         <div v-else class="elevation-6 rounded bg-success">
-            <img :src="event.coverImg" alt="" class="img-fluid card-img rounded-top">
+            <img :src="event.coverImg" alt="" class=" img img-fluid card-img rounded-top">
             <div class="text-center fw-bold p-1">
                 <div>{{ event.name }}</div>
                 <div>{{ event.location }}</div>
